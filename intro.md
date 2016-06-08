@@ -11,4 +11,4 @@
 
 在语音识别和计算机视觉两个输入信号抽象层次较低的领域取得较大成功后，深度学习又继续进军自然语言处理领域。深度学习巨头之一Hinton就在2015年在Nature上撰文表示未来几年深度学习会在自然语言处理领域产生巨大的影响。[5]
 
-实际上，深度学习方法在自然语言处理领域已经有很大建树，这些成果在一定程度上改变了自然语言处理问题的基本方法。如2003年，Bengio等人使用三层的auto-encoder对n-gram模型进行建模，得到word embedding。[o16]word embedding又称词的distributed representation，这是一种蕴含语义信息的稠密向量表示。
+实际上，深度学习方法在自然语言处理领域已经有很大建树，这些成果在一定程度上改变了自然语言处理问题的基本方法。如2003年，Bengio等人使用三层的auto-encoder对n-gram模型进行建模，得到word embedding。[o16]word embedding又称词的distributed representation，这是一种蕴含语义信息的稠密向量表示。和传统的onehot vector相比，这种新的词表示方法

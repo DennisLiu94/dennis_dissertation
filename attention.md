@@ -9,10 +9,66 @@
 
 	插入attention 综述内容
 
+	Attention Model 综述
+
+	Attention Model作为一种可以和各种不同深度神经网络结合的增强网络表达能力的机制，最近受到NLP顶尖研究者们的关注，并且已经在一些具体任务上取得了可喜的成果。知名的NIPS会议专门设置了名为RAM(Reasoning, Attention, Memory)的workshop来讨论attention model和一些相关方法的最新研究进展。
+
+追溯attention model的来源，可以发现一条线索是早期其在图像和计算机视觉领域的应用。较早的一片文章是Learning to combine foveal glimpses with a third-order boltzmann machine. Hugo Larochelle and Geoffrey E. Hinton. In NIPS, pp. 1243-1251, 2010 作者在切分过的图片上训练的三阶Boltzmann machine在几个分类任务上都达到了和当时的在整幅图片上训练的系统相同的水平。这篇文章中，attention机制还没有被明确指出。作者用glimpse这个词描述算法每次只对图片的局部进行观察这一行为。这篇文章暗示了这样的内容：在面对特定的任务时，相同的训练水平下，对数据局部分别处理可以得到和对数据整体处理一样好的效果。
+
+两年之后的文章  Learning where to attend with deep architectures for image tracking. Denil et. al. Neural Computation, 2012.中，attention已经作为一个关键词出现在文章中。本文中使用了attentional model来描述他们用于同时多对象追踪模型。这个模型的特点在于其利用人眼在追踪中gaze的机制，即人不会同时对整幅图片进行分析而是只关注包含被追踪对象的一个小区域。人类的这种特点在2001年的Colombo, John. The development of visual attention in infancy.和其他一些相关的心理学文章中被指出。这里attention，即只关注和任务相关的部分数据，是人类能够轻松完成视野中物体轨迹追踪这样大数据流量任务的关键机制。
+
+2014年发表在NIPS上的一篇文章Recurrent models of visual attention. V. Mnih, N. Hees, A. Graves and K. Kavukcuoglu将attention机制和recurrent模型联系起来。接续上文的论述，这篇文章中也把attention机制作为解决在较大的高清图片上使用卷积网络计算带来的复杂度问题的方法。
+
+在其他一些计算机视觉模型，如物体识别任务的模型中，需要用窗口扫过整个图片或者视野进行卷积操作。虽然已经提出了各种方法来降低这一过程的复杂度，如CVPR 2010中Pedro F. Felzenszwalb, Ross B. Girshick, and David A. McAllester.等人所作的工作。但是这种方法本身还是不能在处理一张图片或一个场景的过程，在后续计算中充分使用前面已经完成的计算所获得的信息。
+
+在V.Mnih 等人提出的模型中，agent只能通过一个视野狭窄或者频率通道狭窄的传感器来观察目标图片或者场景。在这里，获得目标图片或者场景信息的过程被建模为一个动作序列。Agent被训练成自适应的逐次以较高分辨率观测局部信息或者较低分辨率观测更大范围内的信息。后续的行为由前面已完成观察获得的信息决定。在这里DeepMind 团队使用了其著名的增强学习技术，训练了一个在MNIST上的识别demo。在demo展示出了agent通过观察整张低分辨率图片和自适应观察局部高分辨率图片的观察过程。虽然其模型的表现不如深层卷积模型，但在计算量上远远小于后者。
+
+在将Attention Model成功地和RNN网络结合运用在CV领域之后，可以想见地是这一成果会被迅速转移到同样常用RNN进行句子表示建模的NLP领域。
+
+在NLP领域使用attention model的一个基本条件是目前NLP任务可以使用和CV任务相似的神经网络结构模型进行处理。
+
+在word2vector横空出世后，学界始终在探索新的词，短语以及句子表示形式。神经网络模型中常见的distributed representation在面对NLP的分类，聚类，翻译等具体任务时表现出了出乎意料的易用性和高性能。
+
+由于深度学习的浪潮是从CV领域开始，在深度学习模型上NLP领域的研究人员初期更多地是处于学习借鉴的阶段。如Zeng D, Liu K, Lai S, et al. Relation Classification via Convolutional Deep Neural Network[J]. 2014.这篇文章中，使用CV领域研究者根据生物学启发发明的卷积神经网络进行了关系分类任务，取得了比较好的效果。但是在使用CNN的过程中，存在这窗口大小有限无法建模长序列等一些问题。
+
+另外一些学者尝试使用更适合对序列建模的RNN模型并对其进行改进。RNN模型中将一个认为一个序列是按照时间顺序发生的时间，在整个时间流上共享参数；RNN单元内部保存一个有此刻输入和前一时刻状态决定的状态向量。由于是对序列建模，RNN模型应用在NLP问题上十分方便。早期RNN模型的梯度爆炸和消失问题也随着将RNN单元替换为LSTM单元得到了较好的解决。
+
+例如，Cho K, Merrienboer B V, Gulcehre C, et al. Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation[J]. Eprint Arxiv, 2014.这篇文章中实现了一个end-to-end RNN翻译模型。其思路是使用RNN网络对一个句子或短语进行表示学习，得到一个固定长度的句子向量（一般是RNN网络最后一个step的输出）。再把该表示作为输入输入到另外一个自然语言生成RNN网络中，生成出整个目标语句。
+
+这种端到端的NMT方法在较短的句对上取得了不错的成效，但是一个固定长度的向量表示能表达的信息有限。采用此种机制的模型表现随着句子长度增长有着明显的下降。另外，我们也不能期望一个固定长度的向量可以表达足够丰富的语义，使得这一模型在QA等其他任务上受到了较大的限制。
+
+这一问题随着attention 机制的引入得到了较好的解决。在翻译模型上，Neural Machine Translation by Jointly Learning to Align and Translate. D. Bahdanau, K. Cho, Y. Bengio; International Conference on Representation Learning 2015.这篇文章在RNN翻译模型的基础上引入attention机制实现了类似传统翻译模型中词对齐的概念。
+
+和上文中提到的利用RNN模型将源语句训练成一个定长向量句子表示不同，这篇文章使用一个BLSTM网络将句子建模为一个向量序列。向量的个数和句子长度相同。由于使用的是双向网络，因此每个step的输出都包含整个句子全部信息，但是更多的关注当前step附近的词的信息。整个向量序列被保存起来，供decoder在生成语句时使用。
+在decoder生成目标语句的某个词时，会利用attention机制自动选择句子表示向量序列中某些step组成context，并将context和decoder上个step的输出合并作为输入。
+
+这样在生成目标语句的不同部分时，模型就选取和当前目标相关性强的原语句信息作为输入，解决了定长向量表达能力不足的问题。熟悉MT的读者还会马上注意到这一机制的表现和传统SMT中词对齐机制非常类似。
+
+下图即使本篇论文的实验结果。实验表明，带有attention机制的NMT模型在长句上的表现不会下降，而其他NMT模型在句子长度超过30时下降明显，长度50时表现很差。一个可能的解释是50单词的句子已经超过了其模型中确定长度向量句子表示表达能力的上限，已经无法提供生成目标句子需要的信息。
+ 
+
+Attention model在NLP领域另外一个已经有较好研究结果的是QA。
+
+在阅读材料回答和材料相关的问题时，也存在材料较长无法通过神经网络获得较好表示的问题。加入attention机制后可以直接对整篇文章使用LSTM建模，在回答问题时通过attention层选取相应的部分作为答案生成其的输入进行解答。
+
+未完成……
+
+
+另外一个理解attention model的角度是从建模人类记忆的方面。正如NIPS RAM workshop 的名字中暗示的，reasoning(推理)，memory(记忆)和attention(注意力)之间有着深刻的联系。
+
+对记忆建模的一个motivation是NN相关的模型利用了现代计算机很强的算力，但对内存空间的利用几乎没有。另外一个motivation是人类推理过程中需要回忆知识，在阅读理解问题中常常需要回看文本，如何使得机器具有这样的能力同样是最终实现AI路上的一个挑战。(待补充引用论文)
+
+对记忆直接建模的研究有Neural Turing Machines. Alex Graves, Greg Wayne, Ivo Danihelka. arXiv Pre-Print, 2014神经网络图灵机，Memory Networks. Jason Weston, Sumit Chopra, Antoine Bordes. International Conference on Representation Learning, 2015中的记忆网络等。这些工作尝试赋予神经网络读写一个内存区域的功能，期望以此增强神经网络的表达能力。
+
+Attention model 可以认为是广义上memory model的一种退化形式。在memory中需要决定何时利用那块记忆，这里可以用类似attention 权重的方式解决。（待补充）另外，上文中提到的BLSTM网络加attention model的结构可以被看作模型的记忆空间为BLSTM建模的整个句子表示，在进行后续任务时模型按照需求“回忆”memory空间中的内容。
+
+从这个角度上来看，attention model有着更加广泛的物理意义和应用空间。其研究可以和memory等内容结合起来。在面对具体任务时，我们也应该更加灵活的根据具体需求选择网络结构，才能达到比较好的效果。
+
+
 	插入attention 综述内容
 
 
-	受到Deepmind文章中模型的启发，作者设计了一个通过单层RNN进行特征选取的attention机制，用来替代手工设计的pooling函数。
+	受到上文提到的Deepmind文章中决策链模型的启发，作者设计了一个通过单层RNN进行特征选取的attention机制，用来替代手工设计的pooling函数。
 
 	在第二章介绍的基线模型中，原始输入语句经过LSTM层可以得到一个由LSTM每个step输出构成的长度和语句长度成正比的句子表示，这里作者暂时称其为序列句子表示。
 	通过从前的研究可以知道，LSTM得到的序列句子表示中，某个step的输出更多地反映相应位置句子内容的局部信息。
